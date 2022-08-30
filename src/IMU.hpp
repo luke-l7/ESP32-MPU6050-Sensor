@@ -16,11 +16,3 @@ public:
     ~IMU(){};
     int Begin() noexcept;
 };
-
-IMU::IMU(/* args */)
-{
-}
-
-IMU::~IMU()
-{
-}
