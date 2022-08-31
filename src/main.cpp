@@ -20,5 +20,5 @@ void loop() {
   imu.Sample(sample_array);
   Serial.println("Acceleration X :-");
   Serial.println(sample_array[0]);
-  delay(1000);
+  delay(1500);
 }
