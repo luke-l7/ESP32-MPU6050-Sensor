@@ -4,12 +4,12 @@ int IMU::Begin() noexcept
 {
     if (!mpu_.begin()) 
     {
-        return 1;
+        return 0;
     }
     mpu_.setAccelerometerRange(A_RANGE);
     mpu_.setGyroRange(G_RANGE);
     mpu_.setFilterBandwidth(B_RANGE);
-    return 0;
+    return 1;
 }
 
 void IMU::Sample(float sample_buff[7]) noexcept

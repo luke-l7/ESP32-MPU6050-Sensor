@@ -1,9 +1,24 @@
 #include <Arduino.h>
+#include <IMU.hpp>
+
+IMU imu;
+float sample_array[7];
 
 void setup() {
-  // put your setup code here, to run once:
+  Serial.begin(9600);
+  if (!imu.Begin())
+  {
+    Serial.println("Unable to find IMU");
+    while(1)
+    {
+      delay(10);
+    }
+  }
 }
 
 void loop() {
-  // put your main code here, to run repeatedly:
+  imu.Sample(sample_array);
+  Serial.println("Acceleration X :-");
+  Serial.println(sample_array[0]);
+  delay(1000);
 }
