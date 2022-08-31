@@ -15,4 +15,5 @@ public:
     IMU(/* args */): mpu_(){};
     ~IMU(){};
     int Begin() noexcept;
+    void Sample(float sample_buff[7]) noexcept;
 };
