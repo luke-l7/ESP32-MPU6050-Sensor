@@ -1,8 +1,14 @@
 #include <Arduino.h>
 #include <IMU.hpp>
-
+#include <UART.hpp>
 IMU imu;
 float sample_array[7];
+uint8_t UART_NO = UART_NUM_2;
+uint8_t RX_PIN = 16;
+uint8_t TX_PIN = 17;
+uint8_t RTS_PIN = UART_PIN_NO_CHANGE;
+uint8_t CTS_PIN = 5;
+
 
 void setup() {
   Serial.begin(9600);
