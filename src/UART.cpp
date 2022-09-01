@@ -18,6 +18,9 @@ int UART::Open() noexcept
     .rx_flow_ctrl_thresh = 122,
     };
     // Configure UART parameters
-    return uart_param_config(uart_num_, &uart_config) ||
-     uart_set_pin(uart_num_, 16, 17, UART_PIN_NO_CHANGE, 19);
+    int config = uart_param_config(uart_num_, &uart_config);
+    int set = uart_set_pin(uart_num_, TX_PIN_, RX_PIN_, RTS_PIN_, CTS_PIN_);
+    int install = uart_driver_install(uart_num_, buffer_size_, \
+                                        buffer_size_, 10, &uart_queue_, 0);
+    return config|set|install;
 }
