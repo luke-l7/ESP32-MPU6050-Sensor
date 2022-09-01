@@ -1,11 +1,5 @@
 #include <UART.hpp>
-#include <stdio.h>
-#include "freertos/FreeRTOS.h"
-#include "freertos/task.h"
-#include "driver/uart.h"
-#include "driver/gpio.h"
-#include "sdkconfig.h"
-#include "esp_log.h"
+#include <Arduino.h>
 
 int UART::Open() noexcept
 {
@@ -22,5 +16,12 @@ int UART::Open() noexcept
     int set = uart_set_pin(uart_num_, TX_PIN_, RX_PIN_, RTS_PIN_, CTS_PIN_);
     int install = uart_driver_install(uart_num_, buffer_size_, \
                                         buffer_size_, 10, &uart_queue_, 0);
-    return config|set|install;
+/*     Serial.println("config :-");
+    Serial.println(config);
+    Serial.println("set pins:-");
+    Serial.println(set);
+    Serial.println("driver install :-");
+    Serial.println(install); */
+
+    return !(config|set|install);
 }
