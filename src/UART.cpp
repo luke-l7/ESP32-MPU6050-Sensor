@@ -1,6 +1,6 @@
 #include <UART.hpp>
 #include <Arduino.h>
-
+#include <math.h>
 int UART::Open() noexcept
 {
     uart_config_t uart_config = {
@@ -25,3 +25,25 @@ int UART::Open() noexcept
 
     return !(config|set|install);
 }
+
+int UART::Transmit(char* buff, size_t size)
+{
+    return uart_tx_chars(uart_num_, buff, size);
+}
+
+int UART::Receive(char* buff, size_t size)
+{
+    size_t length = 0;
+    uart_get_buffered_data_len(uart_num_, &length);
+    length = min<size_t>(length, size);
+    return uart_read_bytes(uart_num_, buff, length, 100);
+}
+/**
+ * @brief Removes the data on the RX buffer
+ * 
+ */
+void UART::Flush()
+{
+    uart_flush(uart_num_);
+}
+

@@ -30,4 +30,7 @@ public:
                         CTS_PIN_(CTS_PIN){};
     ~UART(){};
     int Open() noexcept;
+    int Transmit(char* buffer, size_t size);
+    int Receive(char* buffer, size_t size);
+    void Flush();
 };
