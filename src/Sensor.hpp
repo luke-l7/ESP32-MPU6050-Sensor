@@ -1,7 +1,9 @@
+#include <stdio.h>
+
 class Sensor
 {
 private:
-    /* data */
+    size_t missed_;
 public:
     Sensor(/* args */);
     ~Sensor();
