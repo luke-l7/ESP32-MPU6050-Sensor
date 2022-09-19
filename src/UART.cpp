@@ -28,7 +28,10 @@ int UART::Open() noexcept
 
 int UART::Transmit(char* buff, size_t size)
 {
-    return uart_tx_chars(uart_num_, buff, size);
+     
+    int bytes_sent = uart_tx_chars(uart_num_, buff, size);
+    uart_flush(uart_num_);
+    return bytes_sent;
 }
 
 int UART::Receive(char* buff, size_t size)
