@@ -1,6 +1,5 @@
 #include <Sensor.hpp>
-
-
+using namespace SensorInternal;
 void flash() ///< used for debugging
 {
     digitalWrite(2, HIGH);
@@ -8,15 +7,30 @@ void flash() ///< used for debugging
     digitalWrite(2, LOW);
 }
 
-Sensor::Sensor(): buff_size_(0), recieving_(false)
+void Sensor::start() noexcept
 {
-    Serial2.begin(115200);
-    if (!imu_.Begin())
+    Serial2.begin(625000);
+/*     if (!imu_.Begin())
     {
         Serial.println("Unable to find IMU");
         return;
-    }
+    } */
     active_ = true;
+}
+
+void Sensor::_ping_back()
+{
+    char* response = ping_response_.getCommand();
+    _transmit_over_serial(response, strlen(response));
+}
+
+void Sensor::_transmit_over_serial(char* buff, size_t size) noexcept
+{
+    Serial.print("transmitting response...");
+    Serial2.write(PREFIX); ///> Start transmission
+    Serial2.write(buff, size);
+    Serial2.write(SUFFIX); ///> End transmission
+    Serial2.flush(true);
 }
 
 void Sensor::_listen()
@@ -25,7 +39,6 @@ void Sensor::_listen()
     if (Serial2.available()) ///< Read next char
     {
         inChar = Serial2.read();
-        Serial.println(inChar);
     }
     else 
         return;
@@ -40,6 +53,7 @@ void Sensor::_listen()
     {
         recieving_.exchange(false); ///< end of recieving
         final_command_.assign(command_buffer_, buff_size_);
+        Serial.println(command_buffer_);
     }    
 
     if (recieving_.load()) ///< if recieving command
@@ -60,14 +74,37 @@ bool Sensor::active() noexcept
 
 bool Sensor::initiated() noexcept
 {
+    // todo : add realtion adctive param
+    if(initiated_)
+        return true;
+
     _listen();
-    if (final_command_.available())
+    // if final command is available and not recieving, as to not interrupt the recieving proccess
+    if (final_command_.available() && (!recieving_.load()))
     {
-        return final_command_.is_identical(ping_command_);
+        if(final_command_.is_identical(ping_command_))
+        {
+            /* _ping_back(); */
+            _transmit_over_serial(nullptr, 0);
+            final_command_.reset();
+        }
+        if (final_command_.is_identical(init_message_))
+        {
+            Serial.print("2");
+            initiated_.exchange(true);
+        }
     }
+    return initiated_;
 }
 
-void Sensor::send_data()
+void Sensor::send_sample()
 {
+    if (!initiated_)
+        return;
     
+    imu_.Sample(sample_buffer_);
+    for(const auto axis_sample : sample_buffer_)
+    {
+        _transmit_over_serial(pack_float(axis_sample), sizeof(ArrangedFloat));
+    }
 }

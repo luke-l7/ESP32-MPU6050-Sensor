@@ -12,15 +12,16 @@ int IMU::Begin() noexcept
     return 1;
 }
 
-void IMU::Sample(float sample_buff[7]) noexcept
+void IMU::Sample(float sample_buff[8]) noexcept
 {
     sensors_event_t a, g, temp;
     mpu_.getEvent(&a, &g, &temp);
-    sample_buff[0] = a.acceleration.x;
-    sample_buff[1] = a.acceleration.y;
-    sample_buff[2] = a.acceleration.z;
-    sample_buff[3] = g.gyro.x;
-    sample_buff[4] = g.gyro.y;
-    sample_buff[5] = g.gyro.z;
-    sample_buff[6] = temp.temperature;
+    sample_buff[0] = g.gyro.x;
+    sample_buff[1] = g.gyro.y;
+    sample_buff[2] = g.gyro.z;
+    sample_buff[3] = temp.temperature;
+    sample_buff[4] = a.acceleration.x;
+    sample_buff[5] = a.acceleration.y;
+    sample_buff[6] = a.acceleration.z;
+    sample_buff[7] = temp.temperature;
 }

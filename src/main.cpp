@@ -1,6 +1,7 @@
 #include <Arduino.h>
-#include <IMU.hpp>
 #include <Sensor.hpp>
+
+Sensor IMUSensor;
 
 void flashThrice()
 {
@@ -16,12 +17,13 @@ void flashThrice()
 void setup() {
   Serial.begin(9600);
   pinMode(2, OUTPUT);
+  IMUSensor.start();
 }
-int count = 0;
-Sensor s;
+
 void loop()
 {
-  if(s.initiated()){
-   s.send_data();
-  }
+  IMUSensor.initiated();
+/*   if(IMUSensor.active() && IMUSensor.initiated()){
+   IMUSensor.send_sample();
+  } */
 }
