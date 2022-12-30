@@ -35,7 +35,7 @@ private:
     bool active_; ///< indicates whether the sensor is active or not
     std::atomic<bool> initiated_; ///< indicates whther the sensor has been initiated (with the init_message_)
 
-    void _transmit_over_serial(char* buff, size_t size) noexcept; ///> transmits the sensor data over the UART
+    void _transmit_over_serial(const char* buff, size_t size) const noexcept; ///> transmits the sensor data over the UART
     bool _command_available(); ///> returns true if a command has been recieved, false otherwise
     void _listen(); ///> Stores incoming commands till a full one is formed
     void _flush_buffer(); ///> flushes the command buffer

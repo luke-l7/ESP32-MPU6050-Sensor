@@ -10,25 +10,26 @@ void flash() ///< used for debugging
 void Sensor::start() noexcept
 {
     Serial2.begin(625000);
-/*     if (!imu_.Begin())
+    if (!imu_.Begin())
     {
         Serial.println("Unable to find IMU");
         return;
-    } */
+    }
     active_ = true;
 }
 
 void Sensor::_ping_back()
 {
-    char* response = ping_response_.getCommand();
+    const char* response = ping_response_.getCommand();
     _transmit_over_serial(response, strlen(response));
 }
 
-void Sensor::_transmit_over_serial(char* buff, size_t size) noexcept
+void Sensor::_transmit_over_serial(const char* buff, size_t size) const noexcept
 {
     Serial.print("transmitting response...");
     Serial2.write(PREFIX); ///> Start transmission
-    Serial2.write(buff, size);
+    size_t bytes = Serial2.write(buff, size);
+    Serial.write(bytes);
     Serial2.write(SUFFIX); ///> End transmission
     Serial2.flush(true);
 }
@@ -84,8 +85,7 @@ bool Sensor::initiated() noexcept
     {
         if(final_command_.is_identical(ping_command_))
         {
-            /* _ping_back(); */
-            _transmit_over_serial(nullptr, 0);
+            _ping_back();
             final_command_.reset();
         }
         if (final_command_.is_identical(init_message_))
@@ -105,6 +105,7 @@ void Sensor::send_sample()
     imu_.Sample(sample_buffer_);
     for(const auto axis_sample : sample_buffer_)
     {
-        _transmit_over_serial(pack_float(axis_sample), sizeof(ArrangedFloat));
+        const char* buff = reinterpret_cast<const char *>(axis_sample);
+        _transmit_over_serial(buff, sizeof(float));
     }
 }

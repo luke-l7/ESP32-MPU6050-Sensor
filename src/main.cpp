@@ -23,7 +23,7 @@ void setup() {
 void loop()
 {
   IMUSensor.initiated();
-/*   if(IMUSensor.active() && IMUSensor.initiated()){
+  if(IMUSensor.active() && IMUSensor.initiated()){
    IMUSensor.send_sample();
-  } */
+  }
 }

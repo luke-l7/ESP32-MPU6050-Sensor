@@ -76,9 +76,9 @@ namespace SensorInternal{
             {
                 return _size;
             }
-            char* getCommand() const noexcept
+            const char* getCommand() const noexcept
             {
-                return nullptr;
+                return _context;
             }
             void reset()
             {
