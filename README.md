@@ -15,4 +15,4 @@ in the specific functions.
 
 ## Connections
 
-<img src="/ESP32-MPU6050-Sensor/assets/connections.png" alt="connection data">
+<img src="/assets/connections.png" alt="connection data">
