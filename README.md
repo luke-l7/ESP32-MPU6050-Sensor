@@ -14,3 +14,5 @@ in the specific functions.
 - Cables (ofcourse)
 
 ## Connections
+
+<img src="/ESP32-MPU6050-Sensor/assets/employee.png" alt="Employee data" title="Employee Data title">
