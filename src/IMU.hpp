@@ -1,3 +1,6 @@
+#ifndef IMU_HEADER
+#define IMU_HEADER
+
 #include <Adafruit_MPU6050.h>
 #include <Adafruit_Sensor.h>
 #include <Wire.h>
@@ -17,3 +20,5 @@ public:
     int Begin() noexcept;
     void Sample(float sample_buff[7]) noexcept;
 };
+
+#endif
